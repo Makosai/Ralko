@@ -1,4 +1,16 @@
 module.exports = {
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'Makosai',
+          name: 'Ralko'
+        },
+        prerelease: true
+      }
+    }
+  ],
   makers: [
     // Windows MSI
     {
