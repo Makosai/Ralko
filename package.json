@@ -1,8 +1,8 @@
 {
   "name": "ralko",
-  "productName": "ralko",
+  "productName": "Ralko",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "A hardware & system monitor that's modular and \"tries\" not to be ugly.",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
@@ -13,8 +13,9 @@
   },
   "keywords": [],
   "author": {
-    "name": "Makosai",
-    "email": "kristopher.ali.dev@gmail.com"
+    "name": "Kristopher Ali",
+    "email": "kristopher.ali.dev@gmail.com",
+    "url": "https://makosai.com"
   },
   "license": "MIT",
   "config": {
