@@ -1,0 +1,51 @@
+#titlebar {
+  height: 24px !important;
+  font-size: 12px;
+
+  background-color: black;
+  color: white;
+
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  /* margin: 4px 4px 0px 4px; */
+}
+
+#buttons {
+  -webkit-app-region: no-drag;
+}
+
+#titlebrand {
+  display: inline-block;
+
+  padding-left: 8px;
+  font-size: 10px;
+
+  height: 100%;
+  vertical-align: middle;
+  line-height: 24px;
+}
+
+#titlebar nav {
+  height: 24px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  float: right;
+}
+
+#buttons > * {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 24px;
+}
+
+#buttons > *:hover {
+  background-color: gray;
+}
+
+#buttons > * span {
+  line-height: 24px;
+}
