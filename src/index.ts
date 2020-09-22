@@ -2,11 +2,12 @@ require('update-electron-app')({
   updateInterval: '1 hour'
 });
 
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
+if (require('electron-squirrel-startup')) {
+  // eslint-disable-line global-require
   app.quit();
 }
 
@@ -14,14 +15,108 @@ const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 600,
-    width: 800,
+    width: 800
   });
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
+  mainWindow.setMenuBarVisibility(false);
+  mainWindow.setAutoHideMenuBar(true);
+
+  {
+    // Menu-specific Windows
+    let aboutModalWindow = new BrowserWindow({
+      parent: mainWindow,
+      modal: true,
+      show: false,
+      frame: false,
+      closable: false
+    });
+    aboutModalWindow.loadURL('./about.html');
+
+    const isMac = process.platform === 'darwin';
+    const template = [
+      // { role: 'appMenu' }
+      ...(isMac
+        ? [
+            {
+              label: app.name,
+              submenu: [
+                { role: 'about' },
+                { type: 'separator' },
+                { role: 'services' },
+                { type: 'separator' },
+                { role: 'hide' },
+                { role: 'hideothers' },
+                { role: 'unhide' },
+                { type: 'separator' },
+                { role: 'quit' }
+              ]
+            }
+          ]
+        : []),
+      // { role: 'fileMenu' }
+      {
+        label: 'File',
+        submenu: [isMac ? { role: 'close' } : { role: 'quit' }]
+      },
+      // { role: 'viewMenu' }
+      {
+        label: 'View',
+        submenu: [
+          { role: 'reload' },
+          { role: 'forcereload' },
+          { role: 'toggledevtools' },
+          { type: 'separator' },
+          { role: 'resetzoom' },
+          { role: 'zoomin' },
+          { role: 'zoomout' },
+          { type: 'separator' },
+          { role: 'togglefullscreen' }
+        ]
+      },
+      // { role: 'windowMenu' }
+      {
+        label: 'Window',
+        submenu: [
+          { role: 'minimize' },
+          { role: 'zoom' },
+          ...(isMac
+            ? [
+                { type: 'separator' },
+                { role: 'front' },
+                { type: 'separator' },
+                { role: 'window' }
+              ]
+            : [{ role: 'close' }])
+        ]
+      },
+      {
+        role: 'help',
+        submenu: [
+          {
+            label: 'About',
+            click: async () => {
+              aboutModalWindow.show();
+            }
+          },
+          {
+            label: 'Learn More',
+            click: async () => {
+              const { shell } = require('electron');
+              await shell.openExternal('https://electronjs.org');
+            }
+          }
+        ]
+      }
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+  }
+
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
